@@ -4,7 +4,7 @@
 # Description. <br/>
 
 This is an application for managing sprints or projects done by students who have enrolled into various courses.
-Apart from this customers can view sprint progress of various students among other features.
+It can be used to track progress of various sprints as well as mark complete sprints that have met the requirements and also issue a certificate to students who have completed a course. It is divided into three main functionalities as follows:
 
 # Functions.<br/>
 
