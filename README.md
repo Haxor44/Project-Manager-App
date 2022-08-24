@@ -31,3 +31,7 @@ It can be used to track progress of various sprints as well as mark complete spr
 - View the structure of the projects/ related info
 - Track the progress
 - Update your progress, .pdf, screenshots, video, comments  
+
+# Technologies Used
+Frontend - Html,Css,Javascript<br/>
+Backend - Firebase
