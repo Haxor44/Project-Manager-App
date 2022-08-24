@@ -4,7 +4,7 @@
 # Description. <br/>
 
 This is an application for managing sprints or projects done by students who have enrolled into various courses.
-It can be used to track progress of various sprints as well as mark complete sprints that have met the requirements and also issue a certificate to students who have completed a course. It is divided into three main functionalities as follows:
+It can be used to track progress of various sprints as well as mark complete sprints that have met the requirements and also issue a certificate to students who have completed a course. The various students enrolled can upload pdf,screenshots as well as videos which can be viewed by project managers. It is divided into three main functionalities as follows:
 
 # Functions.<br/>
 
@@ -29,5 +29,5 @@ It can be used to track progress of various sprints as well as mark complete spr
 # Customer
 - View Projects,
 - View the structure of the projects/ related info
-- track the progress
-- update your progress, .pdf, screenshots, video, comments  
+- Track the progress
+- Update your progress, .pdf, screenshots, video, comments  
