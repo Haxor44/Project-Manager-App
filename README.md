@@ -35,3 +35,6 @@ It can be used to track progress of various sprints as well as mark complete spr
 # Technologies Used
 Frontend - Html,Css,Javascript<br/>
 Backend - Firebase
+
+# Contact/Support
+For any issues please reach out to me on evolmalek04@gmail.com
