@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Upload</title>
+  <link rel="stylesheet" type="text/css" href="/dist/24ce0ec8298b236e5e1c55459e870b8a.css">
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <a href="#" class="customer">Customer</a>
+      <nav>
+        <ul class="links">
+        <li><a href="index.html" class="navs">Home</a></li>
+        <li><a href="home.html" class="navs">Projects</a></li>
+        <li><a href="#" class="navs">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+    <h1>Uploadssss</h1>
+    <section class="upload-section">
+      
+      
+      <div class="upload">
+        <h3>Upload File</h3>
+        <label>File Name</label><br>
+      <input type="text" id="name"><br>
+        <div class="drop-box">
+          <h4>Select File Here.</h4>
+          <label id="ext"></label><br>
+          <img  width="100" height="100" id="myimg"> <br>
+          <label id="progress"></label><br>
+          <button id="select">Select File</button><br>
+          <button id="upload">Upload File</button>
+        </div>
+        
+      </div>
+      
+    </section>
+  </div>
+
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+
+  import {getStorage,ref as sref, uploadBytesResumable,getDownloadURL} from "https://www.gstatic.com/firebasejs/9.10.0/firebase-storage.js";
+  import { getFirestore, collection, doc, setDoc,  getDoc, getDocs, updateDoc, query, where,arrayUnion,arrayRemove } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD_qM2MMQWTfJnmuOorriDXaSl9bG1g4Hw",
+    authDomain: "manager-app-8904a.firebaseapp.com",
+    databaseURL: "https://manager-app-8904a-default-rtdb.firebaseio.com",
+    projectId: "manager-app-8904a",
+    storageBucket: "manager-app-8904a.appspot.com",
+    messagingSenderId: "656541277241",
+    appId: "1:656541277241:web:268b3fab190ddd4ed7c1e8",
+    measurementId: "G-V68J8LR2EC"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  var files = [];
+  var read = new FileReader();
+
+  var name = document.getElementById('name');
+  var ext = document.getElementById('ext');
+  var myimg = document.getElementById('myimg');
+  var progress = document.getElementById('progress');
+  var select = document.getElementById('select');
+  var upload = document.getElementById('upload');
+
+  //The input works in background to open file dialog
+  var input = document.createElement('input');
+  input.type = 'file';
+  //For file selection
+  input.onchange = e => {
+    files = e.target.files;
+    console.log(files);
+    var extension = GetFileExt(files[0]);
+    var names = GetFileName(files[0]);
+
+    name.value = names;
+    ext.innerHTML = extension;
+
+    read.readAsDataURL(files[0]);
+  }
+
+  read.onload = function(){
+    myimg.src = read.result;
+    console.log(myimg.src);
+  }
+
+  select.onclick = function() {
+    input.click();
+    console.log("Baud")
+  }
+
+  function GetFileExt(file) {
+    var temp = file.name.split('.');
+    var ext = temp.slice((temp.length-1),(temp.length));
+    return '.' + ext[0];
+  }
+
+  function GetFileName(file) {
+    var temp = file.name.split('.');
+    var fname = temp.slice(0,-1).join('.');
+    return fname;
+  } 
+
+
+//Reading cookie
+function ReadCookie() {
+               var allcookies = document.cookie;
+               //console.log("All Cookies : " + allcookies );
+               
+               // Get all the cookies pairs in an array
+               var cookiearray = allcookies.split(';');
+               
+               // Now take key value pair out of this array
+               for(var i=0; i<cookiearray.length; i++) {
+                  var name = cookiearray[i].split('=')[0];
+                  var value = cookiearray[i].split('=')[1];
+                  //console.log("Key is : " + name + " and Value is : " + value);
+               }
+               return value;
+            }
+
+
+  //------- upload process ------- //
+  async function UploadFile(user){
+    var fileToUpload = files[0];
+
+    var fileName = name.value + ext.innerHTML;
+  
+    const storage = getStorage();
+    const refStorage = sref(storage, 'Users/'+ fileName);
+    const uploadTask = uploadBytesResumable(refStorage,fileToUpload)
+    uploadTask.on('state-changed', (snapshot)=>{
+      var progres = (snapshot.bytesTransferred / snapshot.totalBytes)*100;
+      progress.innerHTML = "Upload"+progress+'%';
+    },
+    (error) => {
+      alert("Image not uploaded!!!");
+    },
+    ()=>{
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      console.log('File available at', downloadURL);
+      DownloadLink(downloadURL,user);
+    });
+    }
+    );
+  }
+
+  //Getting User to upload file to
+  async function GetUserUpload() {
+  // body...
+  var email = ReadCookie();
+  //console.log(email);
+  var name = "";
+  var team;
+  const q = query(collection(db, "Users"), where("Email", "==", email));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+  // doc.data() is never undefined for query doc snapshots
+    name=doc.id;
+    //console.log(name);
+});
+UploadFile(name);
+}
+
+async function DownloadLink(url,user){
+    var ref1 = doc(db,"Uploads",user);
+    try{
+    const docRef = await updateDoc(ref1,
+      {Links:arrayUnion(url)}
+      );
+    console.log("document id is:", ref1.id);
+  } catch(e){
+    console.log("Error!!!: ", e);
+  }
+}
+
+  upload.onclick = GetUserUpload;
+</script>
+</body>
+</html>

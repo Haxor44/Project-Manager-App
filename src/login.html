@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login</title>
+  <link rel="stylesheet" type="text/css" href="./styles/main.css">
+</head>
+<body>
+  <div class="wrapper">
+    <header class="navs2">
+      <a href="#" class="projects">Projects</a>
+      <nav>
+        <ul class="links">
+        <li><a href="index.html" class="navs">Home</a></li>
+        <li><a href="register.html" class="navs">Sign-up</a></li>
+        </ul>
+        <svg class="close" width="30" height="25" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_74_1424)">
+<path d="M6 0.8125C3.10078 0.8125 0.75 3.35918 0.75 6.5C0.75 9.64082 3.10078 12.1875 6 12.1875C8.89922 12.1875 11.25 9.64082 11.25 6.5C11.25 3.35918 8.89922 0.8125 6 0.8125ZM7.93828 8.66074L7.16484 8.65693L6 7.15254L4.83633 8.65566L4.06172 8.65947C4.01016 8.65947 3.96797 8.61504 3.96797 8.55791C3.96797 8.53379 3.97617 8.51094 3.99023 8.49189L5.51484 6.52412L3.99023 4.55762C3.97607 4.53901 3.96822 4.51571 3.96797 4.4916C3.96797 4.43574 4.01016 4.39004 4.06172 4.39004L4.83633 4.39385L6 5.89824L7.16367 4.39512L7.93711 4.39131C7.98867 4.39131 8.03086 4.43574 8.03086 4.49287C8.03086 4.51699 8.02266 4.53984 8.00859 4.55889L6.48633 6.52539L8.00977 8.49316C8.02383 8.51221 8.03203 8.53506 8.03203 8.55918C8.03203 8.61504 7.98984 8.66074 7.93828 8.66074Z" fill="#CCCCCC"></path>
+</g>
+<defs>
+<clipPath id="clip0_74_1424">
+<rect width="25" height="20" fill="white"></rect>
+</clipPath>
+</defs>
+</svg>
+
+
+      </nav>
+      <svg class="menu" width="59" height="57" viewBox="0 0 59 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M29.5 42.75H7.375V38H29.5V42.75ZM51.625 30.875H7.375V26.125H51.625V30.875ZM51.625 19H29.5V14.25H51.625V19Z" fill="#CCCCCC"></path>
+</svg>
+
+    </header>
+    
+      <div class="login_page">
+        <div class="form">
+          <form>
+        <h2>LOGIN</h2>
+       
+        <input type="text" name="email" placeholder="Enter email" id="l_email" required=""><br>
+
+        
+        <input type="password" name="password" placeholder="Enter password" id="l_password" required=""><br>
+
+        <button type="button" id="login" class="logins" name="submitLoginData">Login</button><br>
+        <button type="button" id="google" class="googles" name="submitGoogleLoginData">Login With Google</button><br>
+        <button type="button" id="twitter" class="tweet" name="submitTwitterLoginData">Login With Twitter</button><br>
+        <button type="button" id="anon" class="anons" name="submitAnonLoginData">Login Anonymously</button><br>
+        <button type="button" id="github" class="git" name="submitGithubLoginData">Login With Github</button>
+        <button type="button" id="test" class="anons" name="submitAnonLoginData">test</button><br>
+    </form>
+        </div>
+     </div>
+</div>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,signInWithPopup, GoogleAuthProvider, TwitterAuthProvider,GithubAuthProvider } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-auth.js";
+  import { getDatabase,set,ref } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
+  import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+  //https://manager-app-8904a.firebaseapp.com/__/auth/handler
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyD_qM2MMQWTfJnmuOorriDXaSl9bG1g4Hw",
+    authDomain: "manager-app-8904a.firebaseapp.com",
+    databaseURL: "https://manager-app-8904a-default-rtdb.firebaseio.com",
+    projectId: "manager-app-8904a",
+    storageBucket: "manager-app-8904a.appspot.com",
+    messagingSenderId: "656541277241",
+    appId: "1:656541277241:web:268b3fab190ddd4ed7c1e8",
+    measurementId: "G-V68J8LR2EC"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+  const db = getFirestore(app);
+  const twitterProvider = new TwitterAuthProvider();
+  const githubProvider = new GithubAuthProvider();
+  const provider = new GoogleAuthProvider();
+  const database = getDatabase();
+  const submitData = document.getElementById('register');
+  const login = document.getElementById('login');
+  const google = document.getElementById('google');
+  const github = document.getElementById('github');
+  const twitter = document.getElementById('twitter');
+  var test = document.getElementById('test');
+  //Login
+  login.addEventListener('click', (e) => {
+    var email = document.getElementById('l_email').value;
+    var password = document.getElementById('l_password').value;
+    signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    // ...
+    console.log(user);
+    cookies(user.email);
+    alert("User logged in successfully!!!");
+    GetPrivs(user.email);
+    
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorMessage);
+  });
+  })
+
+  //Google
+  google.addEventListener('click', (e) => {
+    signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    console.log(user.uid);
+    CheckUser(user.uid);
+    cookies(user.uid);
+    // "zV6zkFNOHTggSnGxGln4anqKBez2"...
+    alert("Baud Rate!!!");
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  });
+  })
+  //Fa-S6qDHwXWJkUWF4Y4oozuZwuQK9LkH2r1JVyt-_FKfnw5N9b
+  //Twitter
+  twitter.addEventListener('click', (e)=> {
+    signInWithPopup(auth, twitterProvider)
+  .then((result) => {
+    // This gives you a the Twitter OAuth 1.0 Access Token and Secret.
+    // You can use these server side with your app's credentials to access the Twitter API.
+    const credential = TwitterAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    const secret = credential.secret;
+
+    // The signed-in user info.
+    const user = result.user;
+    console.log(user);
+    // ...
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorMessage);
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = TwitterAuthProvider.credentialFromError(error);
+    // ...
+  });
+  })
+
+  github.addEventListener('click', (e)=>{
+    signInWithPopup(auth, githubProvider)
+  .then((result) => {
+    // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+    const credential = GithubAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+
+    // The signed-in user info.
+    const user = result.user;
+    console.log(user);
+    conosle.log("Baud!!!");
+    // ...
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GithubAuthProvider.credentialFromError(error);
+    // ...
+  });
+  })
+
+
+  //check user
+  async function CheckUser(userid) {
+    const users = doc(db,"Users",userid);
+    const docSnapshot = await getDoc(users);
+    if(!docSnapshot.exists()){
+      console.log("Not Baud!!!");
+      InsertUser(userid);
+      window.location.href = "/dist/d028e2fa4e75b1a1d022ee135ba6ae7a.html";
+    }
+    else{
+      console.log("Baud!!!");
+      window.location.href = "/dist/d028e2fa4e75b1a1d022ee135ba6ae7a.html";
+    }
+  }
+
+  //insert user
+  async function InsertUser(userid){
+    var ref1 = doc(db,"Users",userid);
+    try{
+    const docRef = await setDoc(ref1,{
+      User:userid,
+    });
+    console.log("document id is:", ref1.id);
+  } catch(e){
+    console.log("Error!!!: ", e);
+  }
+  }
+
+  //cookie 
+  function cookies(uuid){
+    var cookie = escape(uuid) + ";";
+    document.cookie = "uuid=" + cookie;
+    console.log("Setting cookies")
+  }
+  //get privs
+  async function GetPrivs(user) {
+    // body...
+    const q = query(collection(db,"Users"),where("Email","==",user));
+    var privs;
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc)=>{
+      privs=doc.data().Privilege;
+    })
+    console.log(privs);
+    switch(privs){
+      case "Student":
+        window.location.href = "/dist/29baec3005039d7637b9a85fdf996f19.html";
+        break;
+
+      case "Manager":
+        window.location.href = "/dist/626bdc3d77dabcc4c21ecd5c2762ebed.html";
+        break;
+
+      case "Admin":
+        window.location.href = "admin.html";
+        break;
+
+
+
+    }
+  }
+  </script>
+</body>
+</html>

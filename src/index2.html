@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Baud</title>
+	<link rel="stylesheet" type="text/css" href="./styles/main.css">
+</head>
+<body>
+	<nav>
+		<ul>
+			<li id="projects">Projects</li>
+			<li>Home</li>
+			<li>Login</li>
+			<li>Sign-Up</li>
+		</ul>
+	</nav>
+
+	<label>Name</label><input id="name" type="text">
+	<label>Section</label><input type="text" id="section">
+	<label>Name2</label>
+	<select id="gender">
+		<option value="male">Male</option>
+		<option value="female">Female</option>
+	</select>
+
+	<hr>
+
+	<button id="instbtn">Insert</button>
+	<button id="selectbtn">Select</button>
+	<button id="updatebtn">Update</button>
+	<button id="deletebtn">Delete</button>
+	<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyD_qM2MMQWTfJnmuOorriDXaSl9bG1g4Hw",
+    authDomain: "manager-app-8904a.firebaseapp.com",
+    projectId: "manager-app-8904a",
+    storageBucket: "manager-app-8904a.appspot.com",
+    messagingSenderId: "656541277241",
+    appId: "1:656541277241:web:268b3fab190ddd4ed7c1e8",
+    measurementId: "G-V68J8LR2EC"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  import {getDatabase,ref,get,set,child,update,remove} from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
+
+  const db = getDatabase();
+  var name = document.getElementById("name");
+  var section = document.getElementById("section");
+  var gender = document.getElementById("gender");
+
+  var instbtn = document.getElementById("instbtn")
+  var selectbtn = document.getElementById("selectbtn")
+  var updatebtn = document.getElementById("updatebtn")
+  var deletebtn = document.getElementById("deletebtn")
+
+  function insertData(){
+  	set(ref(db,"ProductName/"+section.value), {
+  		ProdName:name.value,
+  		Section:section.value,
+  		Gender:gender.value
+  	})
+  	.then(()=>{
+  		alert("DAta Succesfully");
+  	})
+  	.catch((error)=>{
+  		alert("Not Successful, error"+error);
+  	});
+  }
+
+  instbtn.addEventListener('click',insertData);
+</script>
+	<script src="./index.js"></script>
+</body>
+</html>
