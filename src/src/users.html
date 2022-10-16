@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Users</title>
+	<link rel="stylesheet" type="text/css" href="./styles/upload.css">
+</head>
+<body>
+	<section>
+		<header>
+			<a href="#" class="customer">Projects</a>
+			<nav>
+				<ul class="links">
+				<li><a href="admin.html" class="navs">Home</a></li>
+				<li><a href="users.html" class="navs">Users</a></li>
+				<li><a href="/#" class="navs">Logout</a></li>
+				</ul>
+			</nav>
+		</header>
+		<div class="wrapper1">
+			<h3>Select Users</h3>
+			<table border="3">
+				<thead>
+					<th>Username</th>
+					<th>Email</th>
+				</thead>
+				<tbody id="tbodys">
+				
+				</tbody>
+				
+			</table>
+		</div>
+	</section>
+	<script type="module">
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+  import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyD_qM2MMQWTfJnmuOorriDXaSl9bG1g4Hw",
+    authDomain: "manager-app-8904a.firebaseapp.com",
+    databaseURL: "https://manager-app-8904a-default-rtdb.firebaseio.com",
+    projectId: "manager-app-8904a",
+    storageBucket: "manager-app-8904a.appspot.com",
+    messagingSenderId: "656541277241",
+    appId: "1:656541277241:web:268b3fab190ddd4ed7c1e8",
+    measurementId: "G-V68J8LR2EC"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  //User variables
+  const tbodys = document.getElementById('tbodys');
+
+  async function GetAllUsers() {
+  	const querySnapshot = await getDocs(collection(db,"USers"));
+  	querySnapshot.forEach((doc) => {
+  		console.log(doc.id, "=>" ,doc.data());
+  		let trow1 = document.createElement('tr');
+  		let td1 = document.createElement('td');
+  		let td2 = document.createElement('td');
+  		let td3 = document.createElement('td');
+
+  		td1.innerHTML = doc.id;
+  		td2.innerHTML = doc.data().Email;
+  		td3.innerHTML = doc.data().Privilege;
+
+  		trow1.appendChild(td1);
+  		trow1.appendChild(td2);
+  		trow1.appendChild(td3);
+  		
+
+  		tbodys.appendChild(trow1);
+  	})
+  }
+	</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Admin Panel</title>
+	<link rel="stylesheet" type="text/css" href="./styles/upload.css">
+</head>
+<body>
+<section>
+	<div class="wrapper">
+		<header>
+			<a href="#" class="customer">Tasks</a>
+			<nav>
+				<ul class="links">
+				<li><a href="index.html" class="navs">Home</a></li>
+				<li><a href="users.html" class="navs">Users</a></li>
+				<li><a href="Projects.html" class="navs">Projects</a></li>
+				<li><a href="/#" class="navs">Logout</a></li>
+				</ul>
+			</nav>
+		</header>
+
+			<button id="readData">View All Projects</button>
+			<button id="updateData">Update Data</button>
+			<button id="deleteData">Delete Data</button>
+
+			<h3>View All Projects</h3>
+			<table border="3">
+				<thead>
+					<th>Project</th>
+					<th>Team</th>
+					<th>Description</th>
+				</thead>
+				<tbody id="tbodys1">
+				
+				</tbody>
+				
+			</table>
+		
+
+		<h2>Create Teams</h2>
+		
+			<label>Team Name</label>
+			<input type="text" id="team">
+			<label>Team Leader</label>
+			<input type="text" id="team_leader">
+			<button id="getUsers">Get Users</button>
+			<button id="createTeam" hidden="true">Create Team</button>
+			<button id="viewTeam" >View All Teams</button>
+			<button id="updateTeam">Update Team Info</button>
+			<button id="deleteTeam">Delete Team</button>
+			<h3>Select Users</h3>
+			<table border="3">
+				<thead>
+					<th>Username</th>
+					<th>Email</th>
+				</thead>
+				<tbody id="tbodys">
+				
+				</tbody>
+				
+			</table>
+
+			<h3>View All Teams</h3>
+			<table border="3">
+				<thead>
+					<th>Leader</th>
+					<th>Team</th>
+					<th>Members</th>
+				</thead>
+				<tbody id="tbodys2">
+				
+				</tbody>
+				
+			</table>
+		
+	</div>
+</section>
+
+<script type="module">
+	//Project variables
+	var project_name = document.getElementById('projName');
+	var desc = document.getElementById('description')
+	var team_leader = document.getElementById('team_leader');
+	var getUsers = document.getElementById('getUsers');
+	var readData = document.getElementById('readData');
+	var updateData = document.getElementById('updateData');
+	var deleteData = document.getElementById('deleteData');
+	var is_project = document.getElementById('completed');
+	var team = document.getElementById('teams');
+	var tbodys = document.getElementById('tbodys');
+	//Team Variables
+	var createTeam = document.getElementById('createTeam');
+	var viewTeam = document.getElementById('viewTeam');
+	var uuid = document.getElementById('user_id');
+	var u_email = document.getElementById('user_email');
+	var tbodys1 = document.getElementById('tbodys1');
+	var tbodys2 = document.getElementById('tbodys2');
+
+	const users = [];
+	var max = 0;
+
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+  import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyD_qM2MMQWTfJnmuOorriDXaSl9bG1g4Hw",
+    authDomain: "manager-app-8904a.firebaseapp.com",
+    databaseURL: "https://manager-app-8904a-default-rtdb.firebaseio.com",
+    projectId: "manager-app-8904a",
+    storageBucket: "manager-app-8904a.appspot.com",
+    messagingSenderId: "656541277241",
+    appId: "1:656541277241:web:268b3fab190ddd4ed7c1e8",
+    measurementId: "G-V68J8LR2EC"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+
+
+  //View all projects
+
+  async function ViewProjects(){
+  	const querySnapshot = await getDocs(collection(db,"project"));
+  	querySnapshot.forEach((doc) => {
+  		console.log(doc.id, "=>" ,doc.data());
+  		let trow1 = document.createElement('tr');
+  		let td1 = document.createElement('td');
+  		let td2 = document.createElement('td');
+  		let td3 = document.createElement('td');
+  		let td4 = document.createElement('td');
+
+  		td1.innerHTML = doc.id;
+  		td2.innerHTML = doc.data().Project;
+  		td3.innerHTML = doc.data().Team;
+  		td4.innerHTML = doc.data().Description;
+
+  		trow1.appendChild(td1);
+  		trow1.appendChild(td2);
+  		trow1.appendChild(td3);
+  		trow1.appendChild(td4);
+
+  		tbodys1.appendChild(trow1);
+  	})
+  }
+
+  //Updating A project
+  async function UpdateProject(){
+  	var ref = doc(db,"project",project_name.value);
+
+  	await updateDoc(ref, {
+  		Team:team.value,
+  		Description:desc.value,
+  		IsComplete:is_project.value
+  	}) 
+  	.then(()=>{
+  		alert("Baud!!!!");
+  	}).catch((error)=>{
+  		alert("SIUUUUUUUUUU!!!!!!:"+ error);
+  	});
+  }
+  
+  //Deleting A project
+  async function DeleteProject(){
+  	var ref = doc(db,"project",project_name.value);
+  	const docSnapshot = await getDoc(ref);
+
+  	if(!docSnapshot.exists()){
+  		alert("Document does not exist!!!");
+  	}
+  	await deleteDoc(ref).then(()=>{
+  		alert("Deleted Successfully!!!");
+  	}).catch((error)=>{
+  		alert("Error occurred"+error);
+  	});
+  }
+
+//--------- Team Functions ------------
+  //Getting users in order to put them in a team
+async function GetUsers(users,evnt_Listener){
+const querySnapshot = await getDocs(collection(db, "Users"));
+var u = [];
+
+querySnapshot.forEach((doc) => {
+  // doc.data() is never undefined for query doc snapshots
+  console.log(doc.id, " => ", doc.data());
+  let trow = document.createElement('trow');
+  let td1 = document.createElement('td');
+  let td2 = document.createElement('td');
+  let button1 = document.createElement('button');
+  button1.setAttribute('id',doc.id);
+  button1.textContent = "Add User";
+  //let data = [];
+  
+  td1.innerHTML = doc.id;
+  td2.innerHTML = doc.data().email;
+
+  trow.appendChild(td1);
+  trow.appendChild(td2);
+  trow.appendChild(button1);
+
+  tbodys.appendChild(trow);
+
+  button1.addEventListener('click', (e)=>{
+		console.log(button1.getAttribute('id')); 
+		
+		if(max===2){
+			
+			evnt_Listener.addEventListener('click',(e)=>{
+				CreateTeam(users);
+			})
+
+		} 
+		else{
+			users.push(button1.getAttribute('id'));
+			max++;
+		}
+		
+			
+		//console.log(users);
+		
+		
+		//console.log(users);
+		 //u = users;
+		
+})
+
+  
+});
+
+}
+
+//Create A Team
+async function CreateTeam(users){
+		var ref1 = doc(db,"Team",team.value);
+  	try{
+  	const docRef = await setDoc(ref1,{
+  		Leader:team_leader.value,
+  		Team:team.value,
+  		Members:users
+  	});
+  	console.log("document id is:", ref1.id);
+  } catch(e){
+  	console.log("Error!!!: ", e);
+  }
+}
+
+//View Teams
+async function ViewTeam() {
+	const querySnapshot = await getDocs(collection(db,"Team"));
+  	querySnapshot.forEach((doc) => {
+  		console.log(doc.id, "=>" ,doc.data());
+  		let trow2 = document.createElement('trow');
+  		let td1 = document.createElement('td');
+  		let td2 = document.createElement('td');
+  		let td3 = document.createElement('td');
+  		let td4 = document.createElement('td');
+
+  		td1.innerHTML = doc.id;
+  		td2.innerHTML = doc.data().Leader;
+  		td3.innerHTML = doc.data().Team;
+  		td4.innerHTML = doc.data().Members;
+
+  		trow2.appendChild(td1);
+  		trow2.appendChild(td2);
+  		trow2.appendChild(td3);
+  		trow2.appendChild(td4);
+
+  		tbodys2.appendChild(trow2);
+  	})
+}
+
+//Event Listeners
+getUsers.addEventListener('click',(e)=>{
+	document.getElementById('getUsers').hidden=true;
+	document.getElementById('createTeam').hidden=false;
+  GetUsers(users,createTeam);
+})
+
+
+readData.onclick = ViewProjects;
+updateData.onclick = UpdateProject;
+deleteData.onclick = DeleteProject;
+
+viewTeam.onclick = ViewTeam;
+
+</script>
+</body>
+</html>

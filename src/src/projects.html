@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Create Projects</title>
+	<link rel="stylesheet" type="text/css" href="./styles/upload.css">
+</head>
+<body>
+	<section>
+		
+			<header>
+			<a href="#" class="customer">Projects</a>
+			<nav>
+				<ul class="links">
+				<li><a href="admin.html" class="navs">Home</a></li>
+				<li><a href="users.html" class="navs">Users</a></li>
+				<li><a href="/#" class="navs">Logout</a></li>
+				</ul>
+			</nav>
+		</header>
+		
+		<div class="wrapper1">
+			<h1 style="text-align: center;">Create Project</h1>
+			<div class="task">
+				<label>Project Name</label><br>
+				<fieldset>
+					<input type="text" id="projName">
+				</fieldset>
+			
+			<label>Team</label><br>
+			<fieldset>
+				<input type="text" id="teams"><br>
+			</fieldset>
+			<fieldset>
+				<input type="text" id="completed" hidden="true" value="false">
+			</fieldset>
+			
+			<label>Description</label><br>
+			<fieldset>
+				<textarea id="description" tabindex="5" ></textarea>
+			</fieldset>
+			
+			<button id="insertData">Create Project</button>
+			</div>
+			
+
+		</div>
+	</div>
+			
+	</section>
+
+	<script type="module">
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+  import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyD_qM2MMQWTfJnmuOorriDXaSl9bG1g4Hw",
+    authDomain: "manager-app-8904a.firebaseapp.com",
+    databaseURL: "https://manager-app-8904a-default-rtdb.firebaseio.com",
+    projectId: "manager-app-8904a",
+    storageBucket: "manager-app-8904a.appspot.com",
+    messagingSenderId: "656541277241",
+    appId: "1:656541277241:web:268b3fab190ddd4ed7c1e8",
+    measurementId: "G-V68J8LR2EC"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  //Project Variables
+  var insertData = document.getElementById('insertData');
+  var project_name = document.getElementById('projName');
+  var desc = document.getElementById('description')
+  var is_project = document.getElementById('completed');
+  var team = document.getElementById('teams');
+
+async function InsertProject(){
+  	var ref1 = doc(db,"project",project_name.value);
+  	try{
+  	const docRef = await setDoc(ref1,{
+  		Project:project_name.value,
+  		Team:team.value,
+  		Description:desc.value,
+  		IsComplete:is_project.value
+  	});
+  	console.log("document id is:", ref1.id);
+  } catch(e){
+  	console.log("Error!!!: ", e);
+  }
+  insertData.onclick = InsertProject;
+	</script>
+</body>
+</html>

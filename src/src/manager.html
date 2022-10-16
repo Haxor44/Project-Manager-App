@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Team Lead</title>
+	<link rel="stylesheet" type="text/css" href="./styles/upload.css">
+</head>
+<body>
+	
+		<div class="wrapper">
+			<div id="splashBody">
+	<div id="splashScreen">
+		<div id="loadingContainer">
+				<div id="loadingCircle">
+					<div id="circleOuter"></div>
+					<div id="circleLoader"></div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+	<div class="splashBehind">
+		
+	</div>
+	<div class="splashBehindTwo">
+		
+	</div>
+
+			<header>
+				
+			<a href="#" class="customer">Team Lead</a>
+			<nav>
+				<ul class="links">
+				<li><a href="index.html" class="navs">Home</a></li>
+				<li><a href="tasks.html" class="navs">Tasks</a></li>
+				<li><a href="chat.html" class="navs">Chat</a></li>
+				<li><a href="#" class="navs">Logout</a></li>
+				</ul>
+			</nav>
+		</header>
+			
+			<section>
+			<button id="insertData" hidden="true">Create Task</button>
+			<button id="readData">View All Tasks</button>
+			<button id="updateData" hidden="true">Update Task</button>
+			<button id="deleteData"hidden="true">Delete Task</button>
+			<button id="viewProject" hidden="true">View Project</button>
+			<button id="viewMembers" hidden="true">View Members</button>
+
+			
+			<h3 style="margin-left: 1100px; margin-bottom: 5px;">View All Project</h3>
+			
+			<h3 style="margin-top: -20px;">View All Tasks</h3>
+			<div class="tables">
+			
+			<table border="3">
+				<thead>
+					<th>Task ID</th>
+					<th>Task</th>
+					<th>Team</th>
+					<th>Description</th>
+				</thead>
+				<tbody id="tbodys">
+				
+				</tbody>
+				
+			</table>
+
+			
+			<table border="3">
+				<thead>
+					<th>Project</th>
+					<th>Team</th>
+					<th>Description</th>
+				</thead>
+				<tbody id="tbodys1">
+				
+				</tbody>
+				
+			</table>
+			</div>
+			</section>
+			<section class="g-members">
+				<h3>Members</h3>
+				<h3 style="margin-left: 1100px; margin-bottom: 5px;">Downloads</h3>
+				<div class="members">
+					
+					<table border="3" class="users">
+				<thead>
+					<th>User</th>
+					<th>Message</th>
+					<th>User</th>
+					<th>Message</th>
+					
+				</thead>
+				<tbody id="tbodys2">
+				
+				</tbody>
+				
+			</table>
+			<table border="3" class="users">
+				<thead>
+					<th>User</th>
+					<th>Links</th>
+					
+					
+				</thead>
+				<tbody id="tbodys3">
+				
+				</tbody>
+				
+			</table>
+				</div>
+
+				
+				
+			</section>
+			
+		</div>
+			
+	
+	
+
+ <script type="module">
+	//Task variables
+	var task_name = document.getElementById('task_name');
+	var team = document.getElementById('teams');
+	var desc = document.getElementById('description');
+	var insertData = document.getElementById('insertData');
+	var readData = document.getElementById('readData');
+	var updateData = document.getElementById('updateData');
+	var deleteData = document.getElementById('deleteData');
+	var is_task = document.getElementById('completed');
+	var tbodys = document.getElementById('tbodys');
+
+	//Project variables
+	var viewProject = document.getElementById('viewProject');
+	var tbodys1 = document.getElementById('tbodys1');
+
+	//Member Variables
+	var tbodys2 = document.getElementById('tbodys2');
+	var tbodys3 = document.getElementById('tbodys3');
+	var viewMembers = document.getElementById('viewMembers');
+
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+  import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyD_qM2MMQWTfJnmuOorriDXaSl9bG1g4Hw",
+    authDomain: "manager-app-8904a.firebaseapp.com",
+    databaseURL: "https://manager-app-8904a-default-rtdb.firebaseio.com",
+    projectId: "manager-app-8904a",
+    storageBucket: "manager-app-8904a.appspot.com",
+    messagingSenderId: "656541277241",
+    appId: "1:656541277241:web:268b3fab190ddd4ed7c1e8",
+    measurementId: "G-V68J8LR2EC"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+ 
+
+  //Inserting a task
+  async function InsertTask(){
+  	var ref1 = doc(db,"Task",task_name.value);
+  	try{
+  	const docRef = await setDoc(ref1,{
+  		Task:task_name.value,
+  		Team:team.value,
+  		Description:desc.value,
+  		IsComplete:is_task.value
+  	});
+  	console.log("document id is:", ref1.id);
+  } catch(e){
+  	console.log("Error!!!: ", e);
+  }
+  }
+
+  //View all tasks
+
+  async function ViewTasks(){
+  	const querySnapshot = await getDocs(collection(db,"Task"));
+  	querySnapshot.forEach((doc) => {
+  		console.log(doc.id, "=>" ,doc.data());
+  		let trow = document.createElement('tr');
+  		let td1 = document.createElement('td');
+  		let td2 = document.createElement('td');
+  		let td3 = document.createElement('td');
+  		let td4 = document.createElement('td');
+
+  		td1.innerHTML = doc.id;
+  		td2.innerHTML = doc.data().Task;
+  		td3.innerHTML = doc.data().Team;
+  		td4.innerHTML = doc.data().Description;
+
+  		trow.appendChild(td1);
+  		trow.appendChild(td2);
+  		trow.appendChild(td3);
+  		trow.appendChild(td4);
+
+  		tbodys.appendChild(trow);
+  	})
+  }
+
+  //Updating A task
+  async function UpdateTask(){
+  	var ref = doc(db,"Task",task_name.value);
+
+  	await updateDoc(ref, {
+  		Team:team.value,
+  		Description:desc.value,
+  		IsComplete:is_task.value
+  	}) 
+  	.then(()=>{
+  		alert("Baud!!!!");
+  	}).catch((error)=>{
+  		alert("SIUUUUUUUUUU!!!!!!:"+ error);
+  	});
+  }
+  
+  //Deleting A task
+  async function DeleteTask(){
+  	var ref = doc(db,"Task",task_name.value);
+  	const docSnapshot = await getDoc(ref);
+
+  	if(!docSnapshot.exists()){
+  		alert("Document does not exist!!!");
+  	}
+  	await deleteDoc(ref).then(()=>{
+  		alert("Deleted Successfully!!!");
+  	}).catch((error)=>{
+  		alert("Error occurred"+error);
+  	});
+  }
+
+
+//View Projects for associated team
+async function ViewProject(team) {
+	const projects = collection(db,'project');
+	const querys = query(projects, where("Team", "==", team));
+	const querySnapshot = await getDocs(querys);
+	querySnapshot.forEach((doc)=> {
+		console.log(doc.id,"=> ",doc.data());
+		let trow = document.createElement('tr');
+		let td = document.createElement('td');
+		let td1 = document.createElement('td');
+		let button = document.createElement('button');
+		button.setAttribute('id',doc.id);
+  		button.textContent = "Mark As Complete";
+
+		td.innerHTML = doc.data().Project;
+		td1.innerHTML = doc.data().Description;
+		trow.appendChild(td);
+		trow.appendChild(td1);
+		trow.appendChild(button);
+		tbodys1.appendChild(trow);
+
+		button.addEventListener('click',()=>{
+			ApproveProject(doc.id);
+			button.textContent = "Completed";
+		})
+	})
+	
+}
+
+async function ApproveProject(project){
+	const projects = doc(db,'project', project);
+	await updateDoc(projects, {
+  		isComplete: "true"
+	});
+}
+
+function ReadCookie() {
+               var allcookies = document.cookie;
+               console.log("All Cookies : " + allcookies );
+               
+               // Get all the cookies pairs in an array
+               var cookiearray = allcookies.split(';');
+               
+               // Now take key value pair out of this array
+               for(var i=0; i<cookiearray.length; i++) {
+                  var name = cookiearray[i].split('=')[0];
+                  var value = cookiearray[i].split('=')[1];
+                console.log("Key is : " + name + " and Value is : " + value);
+               }
+               return value;
+            }
+
+const user  = ReadCookie();
+console.log(user);
+
+async function GetUser(email){
+	const users = collection(db,"Users");
+	const q1 = query(users,where("Email","==",email));
+		const querySnapshot = await getDocs(q1);
+	querySnapshot.forEach((doc)=> {
+		console.log(doc.id,"=> ",doc.data());
+		GetTeam(doc.id);
+		
+	})
+	
+}
+
+async function GetTeam(users) {
+	// body...
+	const team = collection(db,"Team");
+	const q = query(team, where("Members", "array-contains", users));
+	const members = [];
+		const querySnapshot = await getDocs(q);
+	querySnapshot.forEach((doc)=> {
+		console.log(doc.id);
+		ViewProject(doc.id);
+		let tr = document.createElement('tr');
+		let td;
+		let button;
+		
+
+  	doc.data().Members.forEach((data)=>{
+  		td = document.createElement('td');
+  		button = document.createElement('button');
+			button.setAttribute('id',data);
+	  	button.textContent = "Send Message";
+  		td.innerHTML = data;
+  		tr.appendChild(td);
+  		tr.appendChild(button);
+  		button.addEventListener('click',(e)=>{
+  			console.log(data);
+  			SendMessage(data);
+  	});
+  		GetDownloads(data);
+  	});
+
+
+
+		tbodys2.appendChild(tr);
+		
+
+	})	
+}
+
+// Get Team member download loinks
+async function GetDownloads(member) {
+	const upload = await getDoc(doc(db,"Uploads",member));
+	if (upload.exists()) {
+		console.log("Baud!!!");
+		let tr = document.createElement('tr');
+		let td1 = document.createElement('td');
+		td1.innerHTML = upload.id;
+		tr.appendChild(td1);
+		for (var i = 0; i<upload.data().Links.length;  i++) {
+				console.log(upload.data().Links[i]);
+				let a  = document.createElement('a');
+				let br  = document.createElement('br');
+				a.setAttribute('href',upload.data().Links[i]);
+				a.textContent = "Link "+i;
+				tr.appendChild(a);
+				tr.appendChild(br);
+		}
+
+		tbodys3.appendChild(tr);
+
+	}
+	
+}
+
+//Send a message
+function SendMessage(userName){
+	//sessionStorage.clear();
+	sessionStorage.setItem("User", userName);
+}
+
+viewMembers.onclick = GetUser(user);
+
+viewProject.onclick = ViewProject;
+
+readData.onclick = ViewTasks;
+
+//splash
+
+	var loadingCircle = document.getElementById('loadingCircle');
+	var splashScreen = document.getElementById('splashScreen');
+
+	window.addEventListener("DOMContentLoaded",()=>{
+		setTimeout(splash,1000);
+	})
+
+	function splash(){
+		loadingCircle.style.display = "none";
+		splashScreen.style.display = "none";
+	}
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+body{
+    background: #FFFFFF;
+    margin: 1.5em;
+    font-family: "Poppins",sans-serif;
+}
+
+.customer{
+    color: rgba(6, 125, 235, 1);
+    font-size: 48px;
+    letter-spacing: 0%;
+    text-align: left;
+    font-family: "Poppins", sans-serif;
+    list-style: none;
+    text-decoration: none;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.links{
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.navs{
+    text-decoration: none;
+    margin: 2em;
+}
+
+.side-nav{
+    width: 25vh;
+    height: 70vh;
+    background: #937ECE;
+    margin-top: 2em;
+    position: fixed;
+    left: 0;
+}
+
+.links2{
+    margin-top: 3em;
+    list-style: none;
+
+}
+.badge {
+    box-sizing: border-box;
+    display: inline-block;
+    background-color: #8746F0;
+    color: white;
+    
+    border-radius: 3rem; // As longe as this is bigger than the fontsize
+    text-align: center;
+
+    font-size: 1.6rem;
+    font-weight: 400;
+    padding: .05rem .8rem .1rem;
+    line-height: inherit;
+}
+.navs1{
+    text-decoration: none;
+    padding: 0px 0px 0px -2px;
+    font-size: 24px;
+    color: white;
+    margin-top: 45px;
+
+}
+
+.navs3{
+    text-decoration: none;
+    color: white;
+}
+.content{
+    margin-left: 450px;
+    margin-top: 90px;
+}
+.card1 {
+background-color: white;
+width:700px;
+padding: 20px;
+border-radius: 15px;
+box-shadow: 5px 5px 7px 2px #8746F0;
+}
+.card-wrapper{
+    display:flex;
+    justify-content:space-between;
+}
+.card {
+background-color: #FDF9F9;
+width: 150px;
+padding: 20px;
+color: #1b3e59;
+border-radius: 15px;
+box-shadow: 8px 8px 16px 2px #8746F0;
+text-align: center;
+}
+.tables{
+    display: flex;
+    justify-content: space-between;
+}
+table { 
+    width: 450px; 
+    border-collapse: collapse; 
+    }
+
+th { 
+    background: #8746F0; 
+    color: white; 
+    font-weight: bold; 
+    }
+
+td, th { 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    text-align: left; 
+    font-size: 18px;
+    }
+tr:nth-of-type(even) { 
+    background: #eee; 
+    }
+.upload-section{
+    text-align: center;
+}
+.upload{
+    margin-top: 40px;
+    margin-left: 500px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
+    width: 400px;
+    height: 360px;
+    background-color: #ffffff;
+    padding: 10px 30px 40px;
+}
+
+.upload h3{
+    font-size: 22px;
+  font-weight: 600;
+}
+
+.drop-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 3px dotted #a3a3a3;
+  border-radius: 3px;
+}
+
+
+.task{
+    background: #F9F9F9;
+  padding: 25px;
+  margin: 150px 0;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+fieldset{
+    border: medium none !important;
+  margin: 0 0 10px;
+  min-width: 100%;
+  padding: 0;
+  width: 100%;
+}
+
+.task input,
+.task input,
+.task input,
+.task input,
+.task textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  background: #FFF;
+  margin: 0 0 5px;
+  padding: 10px;
+}
+
+.wrapper1{
+    max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.task input:focus,
+.task textarea:focus {
+  outline: 0;
+  border: 1px solid #aaa;
+}
+
+.g-members{
+    margin-top: 270px;
+}
+.members{
+     display: flex;
+     justify-content: space-between;
+}
+
+.users{
+    
+}
+
+//Splash
+
+body.visibleSplash {
+    overflow: visible !important;
+}
+#splashScreen {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #fff;
+    border-bottom: 5px solid #333;
+    overflow: hidden;
+}
+#loadingContainer {
+    width: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    overflow: hidden;
+}
+
+
+#loadingCircle {
+    width: 75px;
+    height: 75px;
+    margin: 30px auto 0;
+    background: #fff;
+    display: block;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+}
+#circleOuter {
+    width: 60px;
+    height: 60px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+#circleLoader {
+    width: 75px;
+    height: 75px;
+    background: linear-gradient(to bottom, rgba(0,0,0,1) 0%,rgba(125,185,232,0) 100%);
+    position: absolute;
+    right: 50%;
+    bottom: 50%;
+    transform-origin: bottom right;
+    z-index: 1;
+    animation: rotateLoader 1.5s linear infinite;
+}
+@keyframes rotateLoader {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
+}

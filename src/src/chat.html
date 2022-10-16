@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chats</title>
+  <link rel="stylesheet" type="text/css" href="./styles/chat.css">
+</head>
+<body>
+  <div class="menu">
+            <div class="back"><i class="fa fa-chevron-left"></i> <img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div>
+            <div class="name" id="Name"></div>
+            <div class="last">18:09</div>
+        </div>
+    <ol class="chat" id="chats">
+    <li class="other">
+        <div class="avatar"><img src="https://i.imgur.com/DY6gND0.png" draggable="false"/></div>
+      <div class="msg">
+        <p>Hello!</p>
+        <p>Are you coming to dinner downtown? <emoji class="pizza"/></p>
+        <time>20:17</time>
+      </div>
+    </li>
+    </ol>
+      <div class="emojis">
+        <button type="button" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
+      </div>
+      <input class="textarea" type="text" id="chat-input" placeholder="Type here!"/>
+      
+   
+    
+    
+      
+           
+    </div>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-analytics.js";
+  import { getDatabase, ref, set, child, update, remove, onValue, push, get } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD_qM2MMQWTfJnmuOorriDXaSl9bG1g4Hw",
+    authDomain: "manager-app-8904a.firebaseapp.com",
+    databaseURL: "https://manager-app-8904a-default-rtdb.firebaseio.com",
+    projectId: "manager-app-8904a",
+    storageBucket: "manager-app-8904a.appspot.com",
+    messagingSenderId: "656541277241",
+    appId: "1:656541277241:web:268b3fab190ddd4ed7c1e8",
+    measurementId: "G-V68J8LR2EC"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase();
+
+  //Variables
+  const chats = document.getElementById("chats");
+  const message = document.getElementById("chat-input");
+  const chatbtn = document.getElementById("chat-submit");
+  const name = document.getElementById("Name");
+
+
+
+  // Get User To send message to
+  let user = sessionStorage.getItem("User");
+  let log = sessionStorage.getItem("Loggedin");
+  console.log(log);
+  name.innerHTML = user;
+  //Chat app
+  function Chat(user){
+    const refs = ref(db);
+    get(child(refs, "Chats/" + "Messages/"+user)).then((snapshot)=>{
+      if (snapshot.exists()) {
+        UpdateChats(user);
+      } 
+      else {
+        InsertChat(user);
+      }
+    });
+  }
+
+  //insert chat's
+  function InsertChat(User) {
+    // body...
+    set(ref(db, 'Chats/' + "Messages/"+User), {
+    M1:message.value
+  })
+    .then(()=>{
+      alert("Message Sent!!!");
+    })
+    .catch((error)=>{
+      alert(error);
+    });
+  }
+
+  function ReadChats(User){
+    const starCountRef = ref(db, 'Chats/' + "Messages/" + User);
+      onValue(starCountRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          console.log(data);
+          DisplayChats(data);
+        }
+        else{
+          console.log("Enter message please!!!!");
+        }
+        
+      });
+  }
+
+  function ReadMyChats(User){
+    const starCountRef = ref(db, 'Chats/' + "Messages/" + User);
+      onValue(starCountRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          console.log(data);
+          DisplayMyChats(data);
+        }
+        else{
+          console.log("Enter message please!!!!");
+        }
+        
+      });
+  }
+
+  function ReadAllChats(user,l_user){
+    ReadChats(user);
+    ReadMyChats(l_user);
+  }
+
+  function DisplayChats(item){
+    for (const [key, value] of Object.entries(item)) {
+      //console.log(key, value);
+      let li = document.createElement('li');
+      let div = document.createElement('div');
+      let p = document.createElement('p');
+      li.setAttribute('class','other');
+      div.setAttribute('class','msg');
+      p.innerHTML = value;
+      div.appendChild(p);
+      li.appendChild(div);
+      chats.appendChild(li);
+    }
+   
+  }
+  function DisplayMyChats(item){
+    for (const [key, value] of Object.entries(item)) {
+      //console.log(key, value);
+      let li = document.createElement('li');
+      let div = document.createElement('div');
+      let p = document.createElement('p');
+      li.setAttribute('class','self');
+      div.setAttribute('class','msg');
+      p.innerHTML = value;
+      div.appendChild(p);
+      li.appendChild(div);
+      chats.appendChild(li);
+    }
+  }
+  function UpdateChats(User){
+    const updates = {};
+    
+    const newChatKey = push(child(ref(db), 'Chats/')).key;
+    updates['Chats/Messages/' + User + '/' + newChatKey] = message.value;
+      update(ref(db), updates)
+    .then(()=>{
+      alert("Baud!!!");
+    })
+    .catch((error)=>{
+      alert(error);
+    })
+  }
+
+  window.onload = ReadAllChats(user,log);
+  chatbtn.addEventListener('click',()=>{
+    Chat(user);
+  });
+</script>
+</body>
+</html>
